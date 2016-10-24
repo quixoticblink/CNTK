@@ -41,6 +41,8 @@
 //%template() std::vector<CNTK::DictionaryValue>;
 %template() std::vector<std::shared_ptr<CNTK::Function>>;
 %template() std::vector<std::shared_ptr<CNTK::Learner>>;
+%template() std::pair<size_t, double>;
+%template() std::vector<std::pair<size_t, double>>;
 
 // They are defined twice under CNTK::Internal and under CNTK namespace
 %ignore CNTK::Internal::Combine;
@@ -89,12 +91,6 @@ def dynamic_axes(self):
 
     void __setitem__(const wchar_t* key, CNTK::DictionaryValue value) {
         (*($self))[key] = value;
-    }
-}
-
-%extend CNTK::TrainingParameterSchedule<double> {
-    const double& __getitem__(size_t sampleCount) {
-        return (*($self))[sampleCount];
     }
 }
 
@@ -1229,14 +1225,20 @@ def dynamic_axes(self):
 %template(random_uniform_double) CNTK::NDArrayView::RandomUniform<double>;
 %template(DictionaryValueFromDict) CNTK::DictionaryValue::DictionaryValue<CNTK::Dictionary>;
 
-%template(training_param_schedule_double) CNTK::TrainingParameterSchedule<double>;
+// end of NDArrayView
+
+%extend CNTK::TrainingParameterPerUnitSchedule<double, CNTK::TrainingParameterSchedule<double>::UnitType::Sample> {
+    const double& __getitem__(size_t sampleCount) {
+        return (*($self))[sampleCount];
+    }
+}
+
+%template(training_parameter_schedule_double) CNTK::TrainingParameterPerUnitSchedule<double, CNTK::TrainingParameterSchedule<double>::UnitType::Sample>;
 
 %pythoncode %{
-learning_rates_per_sample = training_param_schedule_double
-momentums_per_sample = training_param_schedule_double
+learning_rates_per_sample = training_parameter_schedule_double
+momentums_per_sample = training_parameter_schedule_double
 %}
-
-// end of NDArrayView
 
 //
 // The following callback code is only for testing. Will have to be merged with
@@ -1309,11 +1311,9 @@ def get_output_and_keep_reference(self):
     return variable
 Function.output = lambda self:get_output_and_keep_reference(self)
 
-from .tensor import _add_tensor_ops, _add_eval, _add_array_interface
+from .tensor import _add_tensor_ops, _add_array_interface
 for klass in [Function, Variable]:
     _add_tensor_ops(klass)
-
-_add_eval(Function)
 
 for klass in [Variable, Value, NDArrayView, NDMask]:
     _add_array_interface(klass)
