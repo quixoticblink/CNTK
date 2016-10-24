@@ -3436,7 +3436,7 @@ namespace CNTK
     /// 
     /// Instantiate the CNTK built-in test format minibatch source
     ///
-    inline MinibatchSourcePtr TextFormatMinibatchSource(const std::wstring& dataFilePath, const std::vector<StreamConfiguration>& streamConfigs, size_t epochSize = SIZE_MAX, bool randomize = true)
+    inline MinibatchSourcePtr TextFormatMinibatchSource(const std::wstring& dataFilePath, const std::vector<StreamConfiguration>& streamConfigs, size_t epochSize = SIZE_MAX, bool randomize = true, DistributedCommunicatorPtr communicator = nullptr)
     {
         ::CNTK::Dictionary minibatchSourceConfiguration;
         minibatchSourceConfiguration[L"epochSize"] = epochSize;
@@ -3468,7 +3468,7 @@ namespace CNTK
         deserializerConfiguration[L"input"] = inputStreamsConfig;
         minibatchSourceConfiguration[L"deserializers"] = std::vector<::CNTK::DictionaryValue>({ deserializerConfiguration });
 
-        return CreateCompositeMinibatchSource(minibatchSourceConfiguration);
+        return CreateCompositeMinibatchSource(minibatchSourceConfiguration, communicator);
     }
 
     ///
