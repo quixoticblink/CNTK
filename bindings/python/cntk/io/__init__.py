@@ -62,7 +62,7 @@ class MinibatchSource(cntk_py.MinibatchSource):
     :func:`cntk.trainer.Trainer.train_minibatch` function.
     '''
 
-    def __init__(self, deserializers=None, randomize=True, epoch_size=INFINITELY_REPEAT):
+    def __init__(self, deserializers=None, randomize=True, epoch_size=MAX_UI64):
         if not isinstance(deserializers, (list,tuple)):
             deserializers = [deserializers] # allow passing a single item or a list
         reader_config = ReaderConfig(deserializers=deserializers, randomize=randomize, epoch_size=epoch_size)
@@ -231,7 +231,7 @@ class ReaderConfig(dict):
         epoch_size (`int`): epoch size
     '''
 
-    def __init__(self, deserializers=None, randomize=True, epoch_size=INFINITELY_REPEAT):
+    def __init__(self, deserializers=None, randomize=True, epoch_size=MAX_UI64):
 
         self['epochSize'] = epoch_size
         if not isinstance(deserializers, (list, tuple)):

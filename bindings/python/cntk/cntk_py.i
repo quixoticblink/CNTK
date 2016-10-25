@@ -1047,6 +1047,7 @@ def dynamic_axes(self):
 %shared_ptr(CNTK::Learner)
 %shared_ptr(CNTK::MinibatchSource)
 %shared_ptr(CNTK::DistributedCommunicator)
+%shared_ptr(CNTK::QuantizedDistributedCommunicator)
 %shared_ptr(CNTK::DistributedTrainer)
 
 %include "CNTKLibraryInternals.h"

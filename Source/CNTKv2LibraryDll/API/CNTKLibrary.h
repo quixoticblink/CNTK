@@ -3357,10 +3357,6 @@ namespace CNTK
     class MinibatchSource : public std::enable_shared_from_this<MinibatchSource>
     {
     public:
-        static const size_t InfinitelyRepeat = SIZE_MAX;
-        static const size_t FullDataSweep = SIZE_MAX - 2; // An arbitrary sentinel value
-
-    public:
         ///
         /// Describes the streams 'this' MinibatchSource produces.
         ///
@@ -3544,6 +3540,9 @@ namespace CNTK
         // TODO: Currently this is a workaround to free static MPIWrapper, it will go away soon.
         // Should be called before executable exits.
         CNTK_API static void Finalize();
+
+        // a barrier to sync all ranks that calls WaitAll() underneath
+        CNTK_API virtual void Barrier() = 0;
 
     protected:
         DistributedCommunicator() {};

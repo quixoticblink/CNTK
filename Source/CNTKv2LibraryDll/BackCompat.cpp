@@ -136,8 +136,8 @@ namespace CNTK
             {
                 auto sliceNode = node->As<SliceNode<ElementType>>();
                 primitiveFunctionConfigParameters[PrimitiveFunction::AttributeNameAxis] = AsAxis(sliceNode->Axis());
-                primitiveFunctionConfigParameters[PrimitiveFunction::AttributeNameBeginIndex] = (int)sliceNode->BeginIndex();
-                primitiveFunctionConfigParameters[PrimitiveFunction::AttributeNameEndIndex] = (int)sliceNode->EndIndex();
+                primitiveFunctionConfigParameters[PrimitiveFunction::AttributeNameBeginIndex] = sliceNode->BeginIndex();
+                primitiveFunctionConfigParameters[PrimitiveFunction::AttributeNameEndIndex] = sliceNode->EndIndex();
 
                 opType = PrimitiveOpType::Slice;
             }
@@ -309,7 +309,6 @@ namespace CNTK
                 primitiveFunctionConfigParameters[PrimitiveFunction::AttributeNameBlendTimeConstant] = batchNormalizationNode->BlendTimeConstant();
                 primitiveFunctionConfigParameters[PrimitiveFunction::AttributeNameEpsilon] = batchNormalizationNode->Epsilon();
                 primitiveFunctionConfigParameters[PrimitiveFunction::AttributeNameUseCuDNNEngine] = !batchNormalizationNode->UseCNTKEngine();
-                primitiveFunctionConfigParameters[PrimitiveFunction::AttributeNameSamplesSeen] = batchNormalizationNode->GetSamplesSeen();
 
                 opType = PrimitiveOpType::BatchNormalization;
             }
