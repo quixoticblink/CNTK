@@ -3541,6 +3541,9 @@ namespace CNTK
         // Should be called before executable exits.
         CNTK_API static void Finalize();
 
+        // a barrier to sync all ranks that calls WaitAll() underneath
+        CNTK_API virtual void Barrier() = 0;
+
     protected:
         DistributedCommunicator() {};
     };
